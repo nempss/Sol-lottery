@@ -1,0 +1,9 @@
+target/
+.anchor/
+node_modules/
+.DS_Store
+.env
+.env.local
+test-ledger/
+**/*.so
+.next/
