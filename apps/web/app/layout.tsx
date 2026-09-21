@@ -7,7 +7,10 @@ import { ComplianceBanner } from "@/components/compliance-banner";
 import "./globals.css";
 const sans = Instrument_Sans({ subsets: ["latin"], variable: "--font-sans" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
-export const metadata: Metadata = { title: "Forge", description: "Launch a Solana token. Protocol fees fund a verifiable on-chain reward pool." };
+export const metadata: Metadata = {
+  title: "Solana Lottery",
+  description: "Launch a Solana token. Protocol fees fund a verifiable on-chain reward pool.",
+};
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
