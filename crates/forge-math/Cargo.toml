@@ -1,0 +1,8 @@
+[package]
+name = "forge-math"
+version = "0.1.0"
+edition = "2021"
+description = "Pure integer math for Forge launchpad + lottery. No Solana runtime dependency."
+license = "MIT"
+
+[dependencies]

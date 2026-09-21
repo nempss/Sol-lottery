@@ -1,0 +1,9 @@
+{
+  "name": "Forge",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/rust:1": {}
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "node tests/run_math.mjs"
+}
