@@ -1,12 +1,10 @@
 "use client";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { LOTTERY_ENABLED, explorerAddress } from "@/lib/constants";
 import { lotteryVaultPda } from "@/lib/pda";
-import { formatEur, formatEurFromSol, lamportsToSol, shortKey } from "@/lib/format";
+import { formatEur, formatEurFromSol, lamportsToSol } from "@/lib/format";
 import { useProtocol } from "@/lib/use-protocol";
 import { Countdown } from "@/components/countdown";
 export default function LotteryPage() {
-  const { publicKey } = useWallet();
   const { snap, walletSol, eligible, connectedWallet } = useProtocol();
   if (!LOTTERY_ENABLED) return <div className="max-w-lg"><h1 className="text-3xl font-medium">Rewards disabled</h1><p className="mt-3 text-sm text-mute">The launchpad remains available.</p></div>;
   const vault = snap?.vaultLamports ?? 0;
@@ -21,16 +19,15 @@ export default function LotteryPage() {
       </header>
       <section className="card p-5">
         <p className="text-xs uppercase tracking-[0.18em] text-mute">Your eligibility</p>
-        {!connectedWallet ? <p className="mt-3 text-sm">Connect a wallet to check the floor.</p> : (
+        {!connectedWallet ? <p className="mt-3 text-sm">Connect a wallet on desktop to check the floor. This phone preview shows the UI only.</p> : (
           <>
             <p className="mt-3 text-lg font-medium">{eligible ? "You are eligible" : "You are not eligible"}</p>
             <p className="mt-1 font-mono text-sm text-mute">{walletSol.toFixed(4)} SOL{solEur ? ` · ${formatEurFromSol(walletSol, solEur)}` : ""}</p>
             <p className="mt-3 text-sm text-mute">Requirement: hold at least {formatEur(snap?.minEurCents ?? 1000)} of native SOL at snapshot.</p>
-            {publicKey && <p className="mt-2 font-mono text-xs text-mute">{shortKey(publicKey.toBase58(), 6)}</p>}
           </>
         )}
       </section>
-      <p className="text-sm text-mute">Vault <a className="font-mono" href={explorerAddress(lotteryVaultPda().toBase58())} target="_blank" rel="noreferrer">{lotteryVaultPda().toBase58()}</a></p>
+      <p className="text-sm text-mute">Vault <a className="font-mono" href={explorerAddress(lotteryVaultPda())} target="_blank" rel="noreferrer">{lotteryVaultPda()}</a></p>
     </div>
   );
 }
