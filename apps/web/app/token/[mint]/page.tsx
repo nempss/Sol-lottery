@@ -1,12 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { explorerAddress } from "@/lib/constants";
 import { shortKey } from "@/lib/format";
 export default function TokenPage() {
   const mint = useParams<{ mint: string }>().mint;
-  const { connected } = useWallet();
   const [side, setSide] = useState<"buy" | "sell">("buy");
   const [note, setNote] = useState<string | null>(null);
   return (
@@ -21,7 +19,7 @@ export default function TokenPage() {
             <button key={s} className={`rounded-full px-4 py-1.5 text-sm capitalize ${side === s ? "bg-white text-ink" : "text-mute"}`} onClick={() => setSide(s)}>{s}</button>
           ))}
         </div>
-        <button className="btn-primary mt-5 w-full" onClick={() => setNote(connected ? `${side} routes through forge_core on the curve PDA.` : "Connect a wallet first.")}>{side}</button>
+        <button className="btn-primary mt-5 w-full" onClick={() => setNote(`${side} is preview-only until programs are deployed.`)}>{side}</button>
         {note && <p className="mt-3 text-sm text-mute">{note}</p>}
       </div>
     </div>
