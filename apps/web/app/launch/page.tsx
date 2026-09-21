@@ -1,12 +1,11 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { BRAND_LOGO } from "@/lib/brand";
 
 type Fields = {
   name: string;
   ticker: string;
   description: string;
-  image: string;
   website: string;
   twitter: string;
 };
@@ -15,26 +14,43 @@ const EMPTY: Fields = {
   name: "",
   ticker: "",
   description: "",
-  image: "",
   website: "",
   twitter: "",
 };
 
 export default function LaunchPage() {
   const [fields, setFields] = useState<Fields>(EMPTY);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState(BRAND_LOGO);
   const [status, setStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!file) {
+      setPreview(BRAND_LOGO);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
   function set<K extends keyof Fields>(key: K, value: string) {
     setFields((f) => ({ ...f, [key]: value }));
   }
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!fields.name || !fields.ticker) {
       setStatus("Name and ticker are required.");
       return;
     }
-    setStatus("Preview only. Image, website, and X are stored with launch metadata when programs go live.");
+    if (!file) {
+      setStatus("Upload a picture.");
+      return;
+    }
+    setStatus(`Preview only. ${file.name} will upload with metadata when programs go live.`);
   }
-  const preview = fields.image.trim() || BRAND_LOGO;
+
   return (
     <div className="mx-auto max-w-xl">
       <h1 className="text-3xl font-medium tracking-tight">Launch a coin</h1>
@@ -43,8 +59,14 @@ export default function LaunchPage() {
         <div className="flex items-center gap-4">
           <img src={preview} alt="" className="h-20 w-20 rounded-2xl bg-white object-cover" />
           <label className="block flex-1 text-xs text-mute">
-            Picture URL
-            <input className="field mt-1" value={fields.image} onChange={(e) => set("image", e.target.value)} placeholder="https://" />
+            Picture
+            <input
+              className="mt-2 block w-full text-sm text-white file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-medium file:text-ink"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
+            <span className="mt-1 block text-mute">{file ? file.name : "PNG or JPG from your phone"}</span>
           </label>
         </div>
         <label className="block text-xs text-mute">Name<input className="field mt-1" value={fields.name} onChange={(e) => set("name", e.target.value)} /></label>
