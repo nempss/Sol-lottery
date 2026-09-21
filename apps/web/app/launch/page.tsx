@@ -1,20 +1,20 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-type Fields = { name: string; ticker: string; description: string; image: string; website: string; twitter: string; telegram: string; };
-const EMPTY: Fields = { name: "", ticker: "", description: "", image: "", website: "", twitter: "", telegram: "" };
+type Fields = { name: string; ticker: string; description: string };
+const EMPTY: Fields = { name: "", ticker: "", description: "" };
 export default function LaunchPage() {
-  const { connected } = useWallet();
-  const { setVisible } = useWalletModal();
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [status, setStatus] = useState<string | null>(null);
-  function set<K extends keyof Fields>(key: K, value: string) { setFields((f) => ({ ...f, [key]: value })); }
-  async function onSubmit(e: FormEvent) {
+  function set<K extends keyof Fields>(key: K, value: string) {
+    setFields((f) => ({ ...f, [key]: value }));
+  }
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!connected) { setVisible(true); return; }
-    if (!fields.name || !fields.ticker) { setStatus("Name and ticker are required."); return; }
-    setStatus("Programs are not initialized on this cluster yet. Deploy with anchor deploy then retry.");
+    if (!fields.name || !fields.ticker) {
+      setStatus("Name and ticker are required.");
+      return;
+    }
+    setStatus("Preview only. Programs are not live on this cluster yet.");
   }
   return (
     <div className="mx-auto max-w-xl">
@@ -24,7 +24,7 @@ export default function LaunchPage() {
         <label className="block text-xs text-mute">Name<input className="field mt-1" value={fields.name} onChange={(e) => set("name", e.target.value)} /></label>
         <label className="block text-xs text-mute">Ticker<input className="field mt-1 uppercase" maxLength={10} value={fields.ticker} onChange={(e) => set("ticker", e.target.value.toUpperCase())} /></label>
         <label className="block text-xs text-mute">Description<textarea className="field mt-1 min-h-24" value={fields.description} onChange={(e) => set("description", e.target.value)} /></label>
-        <button className="btn-primary w-full" type="submit">{connected ? "Pay fee and launch" : "Connect to launch"}</button>
+        <button className="btn-primary w-full" type="submit">Preview launch</button>
         {status && <p className="text-sm text-mute">{status}</p>}
       </form>
     </div>
