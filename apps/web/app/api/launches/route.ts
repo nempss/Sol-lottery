@@ -16,15 +16,29 @@ export async function GET() {
     );
     return r.rows;
   });
-  if (rows && rows.length) return NextResponse.json({ source: "index", items: rows });
+  if (rows && rows.length) {
+    return NextResponse.json({
+      source: "index",
+      items: rows.map((row) => ({ ...row, image: row.uri })),
+    });
+  }
   if (process.env.NEXT_PUBLIC_CLUSTER === "mainnet-beta") {
     return NextResponse.json({ source: "empty", items: [] });
   }
   return NextResponse.json({
     source: "demo",
     items: DEMO_LAUNCHES.map((t) => ({
-      mint: t.mint, creator: "", name: t.name, symbol: t.symbol, uri: "",
-      website: "", twitter: "", telegram: "", created_at: t.createdAt, graduated: false,
+      mint: t.mint,
+      creator: "",
+      name: t.name,
+      symbol: t.symbol,
+      image: t.image,
+      uri: t.image,
+      website: t.website ?? "",
+      twitter: t.twitter ?? "",
+      telegram: "",
+      created_at: t.createdAt,
+      graduated: false,
     })),
   });
 }
