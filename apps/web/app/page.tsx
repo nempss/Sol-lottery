@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CLUSTER, LOTTERY_ENABLED, explorerAddress } from "@/lib/constants";
 import { lotteryVaultPda } from "@/lib/pda";
 import { formatEurFromSol, lamportsToSol, shortKey } from "@/lib/format";
-import { DEMO_LAUNCHES, DEMO_WINNERS } from "@/lib/demo-data";
+import { DEMO_LAUNCHES } from "@/lib/demo-data";
 import { useProtocol } from "@/lib/use-protocol";
 import { useIndex } from "@/lib/use-index";
 import { Countdown } from "@/components/countdown";
@@ -31,7 +31,7 @@ export default function HomePage() {
             <p className="mt-3 font-mono text-4xl tracking-tight text-mint">{lamportsToSol(vault, 2)} <span className="ml-2 text-lg text-mute">SOL</span></p>
             <p className="mt-2 text-sm text-mute">{solEur ? formatEurFromSol(vault / 1e9, solEur) : "EUR pending oracle"}</p>
             <div className="mt-6 text-sm"><p className="text-mute">Next draw</p><Countdown endTs={snap?.endTs ?? Date.now()} /></div>
-            <a className="mt-5 inline-block text-xs text-mute" href={explorerAddress(lotteryVaultPda().toBase58())} target="_blank" rel="noreferrer">Vault {shortKey(lotteryVaultPda().toBase58(), 6)}</a>
+            <a className="mt-5 inline-block text-xs text-mute" href={explorerAddress(lotteryVaultPda())} target="_blank" rel="noreferrer">Vault {shortKey(lotteryVaultPda(), 6)}</a>
           </div>
         )}
       </section>
