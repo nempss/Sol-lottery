@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/forge-math",
+    "programs/forge_core",
+    "programs/forge_lottery",
+    "programs/mock_vrf",
+    "programs/mock_oracle",
+]
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
